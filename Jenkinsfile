@@ -45,7 +45,7 @@ pipeline {
                         //     app.push("${env.BUILD_NUMBER}")
                         //     app.push("latest")
                         // }
-                        sh 'echo Hello world '
+                        sh "docker build -t sanket07:$BUILD_NUMBER ."
                     //}
                  }
             }
