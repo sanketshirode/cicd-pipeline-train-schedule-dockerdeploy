@@ -35,7 +35,7 @@ pipeline {
                 branch 'master'
             }
             steps {
-                 //container('dind') {
+                 container('docker') {
                     //script {
                         // app = docker.build("sanket07/train-schedule")
                         // app.inside {
@@ -47,7 +47,7 @@ pipeline {
                         // }
                         sh 'echo Hello world '
                     //}
-                 //}
+                 }
             }
         }
         // stage('Push Docker Image') {
