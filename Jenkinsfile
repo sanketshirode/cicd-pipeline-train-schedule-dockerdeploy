@@ -35,17 +35,19 @@ pipeline {
                 branch 'master'
             }
             steps {
-                script {
-                    // app = docker.build("sanket07/train-schedule")
-                    // app.inside {
-                    //     sh 'echo $(curl localhost:8080)'
-                    // }
-                    // docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
-                    //     app.push("${env.BUILD_NUMBER}")
-                    //     app.push("latest")
-                    // }
-                    echo "print it was successful"
-                }
+                // container('dind') {
+                    //script {
+                        // app = docker.build("sanket07/train-schedule")
+                        // app.inside {
+                        //     sh 'echo $(curl localhost:8080)'
+                        // }
+                        // docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
+                        //     app.push("${env.BUILD_NUMBER}")
+                        //     app.push("latest")
+                        // }
+                        sh 'echo Hello world '
+                    //}
+                // }
             }
         }
         // stage('Push Docker Image') {
