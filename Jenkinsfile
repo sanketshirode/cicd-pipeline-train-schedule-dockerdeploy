@@ -101,6 +101,8 @@ metadata:
   labels:
     some-label: some-label-value
 spec:
+  securityContext:
+    runAsUser: 1000
   containers:
   - name: maven
     image: maven:alpine
