@@ -18,8 +18,8 @@ pipeline {
                       name: docker-daemon
                     spec:
                         containers:
-                        - name: dind
-                          image: docker:19.03.12-dind
+                        - name: docker
+                          image: docker:latest
                           securityContext:
                             privileged: true
                           volumeMounts:
@@ -35,7 +35,7 @@ pipeline {
                 branch 'master'
             }
             steps {
-                 container('dind') {
+                 //container('dind') {
                     //script {
                         // app = docker.build("sanket07/train-schedule")
                         // app.inside {
@@ -47,7 +47,7 @@ pipeline {
                         // }
                         sh 'echo Hello world '
                     //}
-                 }
+                 //}
             }
         }
         // stage('Push Docker Image') {
