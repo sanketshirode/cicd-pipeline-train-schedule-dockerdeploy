@@ -9,6 +9,28 @@ pipeline {
             }
         }
         stage('Build Docker Image') {
+            agent {
+                kubernetes {
+                    label 'Test'
+                    yaml """
+                    kind: Pod
+                    metadata:
+                      name: docker-daemon
+                    spec:
+                        containers:
+                        - name: dind
+                          image: docker:19.03.12-dind
+                          securityContext:
+                            privileged: true
+                          volumeMounts:
+                          - name: dind-storage
+                            mountPath: /var/lib/docker
+                        volumes:
+                        - name: dind-storage
+                          emptyDir: {}
+                        """
+                }
+            }
             when {
                 branch 'master'
             }
@@ -18,7 +40,7 @@ pipeline {
                     app.inside {
                         sh 'echo $(curl localhost:8080)'
                     }
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker_hub_login') {
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
                         app.push("${env.BUILD_NUMBER}")
                         app.push("latest")
                     }
