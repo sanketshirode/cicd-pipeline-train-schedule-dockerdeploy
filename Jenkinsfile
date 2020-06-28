@@ -1,91 +1,130 @@
+// pipeline {
+//     agent any
+//     stages {
+//         // stage('Build') {
+//         //     steps {
+//         //         echo 'Running build automation'
+//         //         sh './gradlew build --no-daemon'
+//         //         archiveArtifacts artifacts: 'dist/trainSchedule.zip'
+//         //     }
+//         // }
+//         stage('Build Docker Image') {
+//             agent {
+//                 kubernetes {
+//                     label 'Test'
+//                     yaml """
+//                     kind: Pod
+//                     metadata:
+//                       name: docker-daemon
+//                     spec:
+//                         containers:
+//                         - name: docker
+//                           image: docker:latest
+//                           command:
+//                           - cat
+//                           tty: true
+//                           securityContext:
+//                             privileged: true
+//                           volumeMounts:
+//                           - name: dind-storage
+//                             mountPath: /var/run/docker.sock
+//                         volumes:
+//                         - name: dind-storage
+//                           emptyDir: {}
+//                         """
+//                 }
+//             }
+//             when {
+//                 branch 'master'
+//             }
+//             steps {
+//                  container('docker') {
+//                     //script {
+//                         // app = docker.build("sanket07/train-schedule")
+//                         // app.inside {
+//                         //     sh 'echo $(curl localhost:8080)'
+//                         // }
+//                         // docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
+//                         //     app.push("${env.BUILD_NUMBER}")
+//                         //     app.push("latest")
+//                         // }
+//                         sh "docker build -t sanket07:$BUILD_NUMBER ."
+//                     //}
+//                  }
+//             }
+//         }
+//         // stage('Push Docker Image') {
+//         //     when {
+//         //         branch 'master'
+//         //     }
+//         //     steps {
+//         //         script {
+//         //             docker.withRegistry('https://registry.hub.docker.com', 'docker_hub_login') {
+//         //                 app.push("${env.BUILD_NUMBER}")
+//         //                 app.push("latest")
+//         //             }
+//         //         }
+//         //     }
+//         // }
+//         // stage('DeployToProduction') {
+//         //     when {
+//         //         branch 'master'
+//         //     }
+//         //     steps {
+//         //         input 'Deploy to Production?'
+//         //         milestone(1)
+//         //         withCredentials([usernamePassword(credentialsId: 'webserver_login', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
+//         //             script {
+//         //                 sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_ip \"docker pull willbla/train-schedule:${env.BUILD_NUMBER}\""
+//         //                 try {
+//         //                     sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_ip \"docker stop train-schedule\""
+//         //                     sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_ip \"docker rm train-schedule\""
+//         //                 } catch (err) {
+//         //                     echo: 'caught error: $err'
+//         //                 }
+//         //                 sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_ip \"docker run --restart always --name train-schedule -p 8080:8080 -d willbla/train-schedule:${env.BUILD_NUMBER}\""
+//         //             }
+//         //         }
+//         //     }
+//         // }
+//     }
+// }
+
+
 pipeline {
-    agent any
-    stages {
-        stage('Build') {
-            steps {
-                echo 'Running build automation'
-                sh './gradlew build --no-daemon'
-                archiveArtifacts artifacts: 'dist/trainSchedule.zip'
-            }
-        }
-        stage('Build Docker Image') {
-            agent {
-                kubernetes {
-                    label 'Test'
-                    yaml """
-                    kind: Pod
-                    metadata:
-                      name: docker-daemon
-                    spec:
-                        containers:
-                        - name: docker
-                          image: docker:latest
-                          command:
-                          - cat
-                          tty: true
-                          securityContext:
-                            privileged: true
-                          volumeMounts:
-                          - name: dind-storage
-                            mountPath: /var/run/docker.sock
-                        volumes:
-                        - name: dind-storage
-                          emptyDir: {}
-                        """
-                }
-            }
-            when {
-                branch 'master'
-            }
-            steps {
-                 container('docker') {
-                    //script {
-                        // app = docker.build("sanket07/train-schedule")
-                        // app.inside {
-                        //     sh 'echo $(curl localhost:8080)'
-                        // }
-                        // docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
-                        //     app.push("${env.BUILD_NUMBER}")
-                        //     app.push("latest")
-                        // }
-                        sh "docker build -t sanket07:$BUILD_NUMBER ."
-                    //}
-                 }
-            }
-        }
-        // stage('Push Docker Image') {
-        //     when {
-        //         branch 'master'
-        //     }
-        //     steps {
-        //         script {
-        //             docker.withRegistry('https://registry.hub.docker.com', 'docker_hub_login') {
-        //                 app.push("${env.BUILD_NUMBER}")
-        //                 app.push("latest")
-        //             }
-        //         }
-        //     }
-        // }
-        // stage('DeployToProduction') {
-        //     when {
-        //         branch 'master'
-        //     }
-        //     steps {
-        //         input 'Deploy to Production?'
-        //         milestone(1)
-        //         withCredentials([usernamePassword(credentialsId: 'webserver_login', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
-        //             script {
-        //                 sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_ip \"docker pull willbla/train-schedule:${env.BUILD_NUMBER}\""
-        //                 try {
-        //                     sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_ip \"docker stop train-schedule\""
-        //                     sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_ip \"docker rm train-schedule\""
-        //                 } catch (err) {
-        //                     echo: 'caught error: $err'
-        //                 }
-        //                 sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_ip \"docker run --restart always --name train-schedule -p 8080:8080 -d willbla/train-schedule:${env.BUILD_NUMBER}\""
-        //             }
-        //         }
-        //     }
-        // }
+  agent {
+    kubernetes {
+      yaml """
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    some-label: some-label-value
+spec:
+  containers:
+  - name: maven
+    image: maven:alpine
+    command:
+    - cat
+    tty: true
+  - name: busybox
+    image: busybox
+    command:
+    - cat
+    tty: true
+"""
     }
+  }
+  stages {
+    stage('Run maven') {
+      steps {
+        container('maven') {
+          sh 'mvn -version'
+        }
+        container('busybox') {
+          sh '/bin/busybox'
+        }
+      }
+    }
+  }
 }
