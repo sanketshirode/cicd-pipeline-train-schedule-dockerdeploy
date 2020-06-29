@@ -29,14 +29,14 @@ pipeline {
                           - name: dind-storage
                             mountPath: /var/run/docker.sock
                           - name: image-storage
-                            mountpath: /tmp
+                            mountpath: /var/lib/docker
                         volumes:
                         - name: dind-storage
                           hostPath:
                             path: /var/run/docker.sock
                         - name: image-storage
                           hostpath:
-                            path: /tmp
+                            path: /home/cloud_user
                         """
                 }
             }
