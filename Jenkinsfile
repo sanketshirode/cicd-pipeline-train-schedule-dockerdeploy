@@ -11,33 +11,7 @@ pipeline {
         stage('Build Docker Image') {
             agent {
                 kubernetes {
-                    label 'Test'
-                    yaml """
-                    kind: Pod
-                    metadata:
-                      name: docker-daemon
-                    spec:
-                        containers:
-                        - name: docker
-                          image: docker:latest
-                          command:
-                          - cat
-                          tty: true
-                          securityContext:
-                            privileged: true
-                          volumeMounts:
-                          - name: dind-storage
-                            mountPath: /var/run/docker.sock
-                          - name: image-storage
-                            mountpath: /var/lib/docker
-                        volumes:
-                        - name: dind-storage
-                          hostPath:
-                            path: /var/run/docker.sock
-                        - name: image-storage
-                          hostpath:
-                            path: /home/cloud_user
-                        """
+                    yamlFile 'pod-template.yml'
                 }
             }
             when {
@@ -54,7 +28,7 @@ pipeline {
                         //     app.push("${env.BUILD_NUMBER}")
                         //     app.push("latest")
                         // }
-                        sh "docker build -t sanket07:$BUILD_NUMBER . -o /tmp"
+                        sh "docker build -t sanket07:$BUILD_NUMBER . -o /var/lib/docker"
                     //}
                  }
             }
