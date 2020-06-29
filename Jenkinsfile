@@ -28,10 +28,15 @@ pipeline {
                           volumeMounts:
                           - name: dind-storage
                             mountPath: /var/run/docker.sock
+                          - name: image-storage
+                            mountpath: /tmp
                         volumes:
                         - name: dind-storage
                           hostPath:
                             path: /var/run/docker.sock
+                        - name: image-storage
+                          hostpath:
+                            path: /tmp
                         """
                 }
             }
@@ -49,7 +54,7 @@ pipeline {
                         //     app.push("${env.BUILD_NUMBER}")
                         //     app.push("latest")
                         // }
-                        sh "docker build -t sanket07:$BUILD_NUMBER ."
+                        sh "docker build -t sanket07:$BUILD_NUMBER . -o /tmp"
                     //}
                  }
             }
