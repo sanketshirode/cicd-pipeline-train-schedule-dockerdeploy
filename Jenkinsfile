@@ -30,7 +30,8 @@ pipeline {
                             mountPath: /var/run/docker.sock
                         volumes:
                         - name: dind-storage
-                          emptyDir: {}
+                          hostPath:
+                            path: /var/run/docker.sock
                         """
                 }
             }
