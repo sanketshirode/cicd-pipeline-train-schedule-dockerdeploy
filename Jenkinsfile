@@ -27,7 +27,7 @@ pipeline {
                             privileged: true
                           volumeMounts:
                           - name: dind-storage
-                            mountPath: /var/lib/docker
+                            mountPath: /var/run/docker.sock
                         volumes:
                         - name: dind-storage
                           emptyDir: {}
