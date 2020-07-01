@@ -28,7 +28,7 @@ pipeline {
                         //     app.push("${env.BUILD_NUMBER}")
                         //     app.push("latest")
                         // }
-                        sh "docker build -t sanket07:$BUILD_NUMBER . -o /var/lib/docker"
+                        sh "docker build  -o / -t sanket07:$BUILD_NUMBER ."
                     //}
                  }
             }
