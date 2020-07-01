@@ -21,4 +21,4 @@ spec:
       path: /var/run/docker.sock
   - name: image-storage
     hostpath:
-      path: /home/cloud_user
+      path: /opt/jenkins
